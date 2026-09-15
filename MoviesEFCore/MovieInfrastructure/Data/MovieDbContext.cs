@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MoviesEFCore.Models.Entities;
+using Movie.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,22 +7,30 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MoviesEFCore.Data
+namespace Movie.Infrastructure.Data
 {
-    internal class MovieDbContext : DbContext
+    public class MovieDbContext : DbContext
     {
+        private readonly string _connectionString;
+
+        public MovieDbContext(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
         //როცა გავუშვებ ასეთი ცხრილები შემქმნება
+        //dbset ეუბნება რომ ცხრილი შექმენი
         public DbSet<Country> Countries { get; set; }
         public DbSet<Studio> Studios { get; set; }
         public DbSet<StudioDetails> StudiosDetails { get;set;}
-        public DbSet<Movie> Movies { get; set; }
+        public DbSet<Movie.Domain.Entities.Movie> Movies { get; set; }
         public DbSet<Actor> Actors { get; set; }
 
 
         // Database-თან კავშირის კონფიგურაცია - აქ ვუთითებთ connection String-ს
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=DESKTOP-8UGO4GL\\SQLEXPRESS;Database=MoviesEFCoreDB;Integrated Security=True;TrustServerCertificate=True;");//აქ ჩემი ქონექშენ სტრინგი
+            optionsBuilder.UseSqlServer(_connectionString);//აქ ჩემი ქონექშენ სტრინგი
         }
 
         //Entities-ის და მათ შორის რელაციებს, ყველაფერს ეს აკეთებს 
@@ -56,12 +64,20 @@ namespace MoviesEFCore.Data
                 .HasForeignKey<StudioDetails>(st => st.StudioId);
 
             //movie vs actor -  (many - to - many)
-            modelBuilder.Entity<Movie>()
+            modelBuilder.Entity<Movie.Domain.Entities.Movie>()
                 .HasMany(m => m.Actors)
                 .WithMany(a => a.Movies)
                 .UsingEntity(ma => ma.ToTable("MoviesActors")); //ამით ვეუბნები რომ junction ცხრილს დაარქვას MOVIESACTORS 
 
 
+            //data seeding - defaultად ვარდეაბა ეს დატა ბაზაში
+            modelBuilder.Entity<Country>()
+                .HasData(
+                    new Country { Id = 1, Name = "USA" },
+                    new Country { Id = 2, Name = "UK" },
+                    new Country { Id = 3, Name = "France" }
+
+                );
         }
     }
 }

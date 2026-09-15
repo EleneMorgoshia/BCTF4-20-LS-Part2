@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MoviesEFCore.Models.Entities
+namespace Movie.Domain.Entities
 {
     public class Actor
     {
@@ -21,3 +21,6 @@ namespace MoviesEFCore.Models.Entities
         public ICollection<Movie> Movies { get; set; }// navigation property for movie
     }
 }
+
+//reflection-ს იყენებს როცა ბევრი ატრიბუტი მაქვს
+//ამიტო ჯობია რომ ბევრი არ მქონდეს 

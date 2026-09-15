@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MoviesEFCore.Models.Entities
+namespace Movie.Domain.Entities
 {
     public class Movie
     {
