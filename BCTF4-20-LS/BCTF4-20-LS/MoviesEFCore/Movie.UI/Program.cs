@@ -12,7 +12,7 @@ using Movie.Infrastructure.Data;
 using Movie.Infrastructure.Repositories;
 using Movie.Service.Implentations;
 using Movie.Service.Interfaces;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace Movie.UI
 {
@@ -34,20 +34,21 @@ namespace Movie.UI
             #endregion
 
 
-            //DI container
+            ////DI container
             var services = new ServiceCollection();
-            services.AddDbContext<MovieDbContext>();                     // addContext-ით ვამატებ dbContextს
-            services.AddScoped<IMovieRepository, MovieRepository>();           // addScoped ით ვამათბ სერვისებს
+
+            services.AddDbContext<MovieDbContext>(options => options.UseSqlServer(_connectionString));
+            services.AddScoped<IMovieRepository, MovieRepository>();// addScoped ით ვამათბ სერვისებს
             services.AddScoped<IMovieService, MovieService>();
             var serviceProcider = services.BuildServiceProvider();
-            
+
             var movieService = serviceProcider.GetRequiredService<IMovieService>();
-            
-            
-            
-            
-            
-            
+
+            ////movie by id:
+            var movieById = movieService.GetMovieById(1);
+            Console.WriteLine(movieById.Title());
+
+
             //creating studio in a bad way:D
             //Studio newStudio = new Studio{Name = "Warner Bros", CountryId = 1 };
             //movieDbContext.Studios.Add(newStudio);

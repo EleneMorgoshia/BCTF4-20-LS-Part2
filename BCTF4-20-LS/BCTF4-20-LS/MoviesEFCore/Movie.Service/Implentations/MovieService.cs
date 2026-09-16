@@ -43,8 +43,8 @@ namespace Movie.Service.Implentations
             if (movieDTO.Title == null)
                 throw new ArgumentException("Movie title cannot be emtpy");
 
-            if (movieDTO.StudioId < 0)
-                throw new ArgumentException("Studio id cannot be less than or equal to 0");
+            if (movieDTO.StudioId <= 0)
+                throw new ArgumentException("Studio id cannot be negtive or  0");
 
             if (movieDTO.ReleaseYear < 0)
                 throw new ArgumentException("ReleaseYear cannot be less than 0");
@@ -60,6 +60,26 @@ namespace Movie.Service.Implentations
             };
 
             await _movieRepository.AddMovieAsync(movie);
+        }
+
+        public async Task<MovieDTO?> GetMovieById(int id)
+        {
+            if (id <= 0)
+                throw new ArgumentException("Movie id cannot be negative or 0");
+        
+            var movieById = await _movieRepository.GetMovieById(id);
+            if (movieById == null)
+                throw new ArgumentException(nameof(movieById));
+
+            MovieDTO movieDTO = new MovieDTO
+            {
+                Id = movieById.Id,
+                Title = movieById.Title,
+                ReleaseYear = movieById.ReleaseYear,
+                StudioName = movieById.Studio.Name
+            };
+
+            return movieDTO;
         }
     }
 }

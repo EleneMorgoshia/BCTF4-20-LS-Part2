@@ -29,5 +29,14 @@ namespace Movie.Infrastructure.Repositories
                     .Include(m => m.Studio)
                     .ToListAsync();
         }
+
+        //classwork
+        public async Task<MovieEntity?> GetMovieById(int id)
+        {
+            var movies = await GetAllMoviesAsync();
+            var movieById = movies.FirstOrDefault(m => m.Id == id);
+            return movieById;
+
+        }
     }
 }
