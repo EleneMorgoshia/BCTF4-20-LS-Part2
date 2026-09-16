@@ -10,9 +10,4 @@
     <ProjectReference Include="..\MovieDomain\Movie.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="Implentations\" />
-  </ItemGroup>
-
 </Project>
