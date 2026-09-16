@@ -28,25 +28,26 @@ namespace Movie.UI
 
             var _connectionString = configuration.GetConnectionString("DefaultConnection");
             #region without DI container
-            //MovieDbContext movieDbContext = new MovieDbContext(_connectionString);
-            //IMovieRepository movieRepository = new MovieRepository(movieDbContext);
-            //IMovieService movieService = new MovieService(movieRepository);
+            MovieDbContext movieDbContext = new MovieDbContext(_connectionString);
+            IMovieRepository movieRepository = new MovieRepository(movieDbContext);
+            IMovieService movieService = new MovieService(movieRepository);
             #endregion
 
 
             ////DI container
-            var services = new ServiceCollection();
+            //var services = new ServiceCollection();
 
-            services.AddDbContext<MovieDbContext>(options => options.UseSqlServer(_connectionString));
-            services.AddScoped<IMovieRepository, MovieRepository>();// addScoped ით ვამათბ სერვისებს
-            services.AddScoped<IMovieService, MovieService>();
-            var serviceProcider = services.BuildServiceProvider();
+            //services.AddDbContext<MovieDbContext>(options => options.UseSqlServer(_connectionString));
+            //services.AddScoped<IMovieRepository, MovieRepository>();// addScoped ით ვამათბ სერვისებს
+            //services.AddScoped<IMovieService, MovieService>();
+            //var serviceProcider = services.BuildServiceProvider();
 
-            var movieService = serviceProcider.GetRequiredService<IMovieService>();
+            //var movieService = serviceProcider.GetRequiredService<IMovieService>();
+                
 
             ////movie by id:
-            var movieById = movieService.GetMovieById(1);
-            Console.WriteLine(movieById.Title());
+            var movieById = await movieService.GetMovieById(1);
+            Console.WriteLine(movieById.Title);
 
 
             //creating studio in a bad way:D

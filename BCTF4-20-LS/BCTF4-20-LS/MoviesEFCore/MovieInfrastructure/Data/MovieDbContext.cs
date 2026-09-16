@@ -13,10 +13,9 @@ namespace Movie.Infrastructure.Data
     {
         private readonly string _connectionString;
 
-        //CONNECTION სტრინგი რო გადმოვცე di-დან
-        public MovieDbContext(DbContextOptions<MovieDbContext> options)
-            : base(options)
+        public MovieDbContext(string connectionString)
         {
+            _connectionString = connectionString;
         }
 
         //როცა გავუშვებ ასეთი ცხრილები შემქმნება
