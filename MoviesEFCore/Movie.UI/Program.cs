@@ -46,20 +46,24 @@ namespace Movie.UI
             //var movieService = serviceProcider.GetRequiredService<IMovieService>();
 
             var movieById = await movieService.GetMovieById(1);
-            Console.WriteLine(movieById.Title);
+            if (movieById != null) 
+            {
+                Console.WriteLine(movieById.Title);
 
-            //udpate movie
-            //var updatedMovie = new UpdateMovieDTO
-            //{
-            //    Id = 1,
-            //    Title = "The matrix Updated",
-            //    ReleaseYear = 1999,
-            //    StudioId = 1
-            //};
-            //await movieService.UpdateMovieAsync(updatedMovie);
+                //udpate movie
+                //var updatedMovie = new UpdateMovieDTO
+                //{
+                //    Title = "The matrix Updated",
+                //    ReleaseYear = 1999,
+                //    StudioId = 1
+                //};
+                //await movieService.UpdateMovieAsync(movieById.Id, updatedMovie);
 
-            //delete movie
-            await movieService.DeleteMovieAsync(movieById.Id);
+                //delete movie
+                await movieService.DeleteMovieAsync(movieById.Id);
+
+            }
+            
         }
     }
 }

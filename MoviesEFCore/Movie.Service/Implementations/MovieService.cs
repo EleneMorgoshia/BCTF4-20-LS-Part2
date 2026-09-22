@@ -67,6 +67,9 @@ namespace Movie.Service.Implementations
                 throw new ArgumentException("Id cannot be negative or 0");
 
             var movieById = await _movieRepository.GetMovieByIdAsync(id);
+            if (movieById == null)
+                return null;
+
             MovieDTO movieDTO = new MovieDTO
             {
                 Id = movieById.Id,
@@ -78,17 +81,17 @@ namespace Movie.Service.Implementations
             return movieDTO;
         }
 
-        public async Task UpdateMovieAsync(UpdateMovieDTO movie)
+        public async Task UpdateMovieAsync(int id, UpdateMovieDTO movie)
         {
             if(movie == null) 
                 throw new ArgumentNullException(nameof(movie));
-            if (movie.Id <= 0)
+            if (id <= 0)
                 throw new ArgumentException("Id cannot be negative or 0");
 
             //უნდა გადავქასთო ენთითიში
             var movieEntity = new MovieEntity
             {
-                Id = movie.Id,
+                Id = id,
                 Title = movie.Title,
                 ReleaseYear = movie.ReleaseYear,
                 StudioId = movie.StudioId
