@@ -20,7 +20,8 @@ namespace Movie.Infrastructure.Repositories
         public async Task AddMovieAsync(MovieEntity movie)
         {
             await _movieContext.Movies.AddAsync(movie);
-            await _movieContext.SaveChangesAsync();
+            //await _movieContext.SaveChangesAsync();
+
         }
 
         public async Task<ICollection<MovieEntity>> GetAllMoviesAsync()
@@ -37,6 +38,28 @@ namespace Movie.Infrastructure.Repositories
             var movieById = movies.FirstOrDefault(m => m.Id == id);
             return movieById;
 
+        }
+
+        //update
+        public async Task UpdateMovieAsync(int id, MovieEntity movie)
+        {
+            var movieById = await GetMovieById(id);
+            if (movieById == null)
+                throw new ArgumentException("There is no movie with this id");
+
+            _movieContext.Movies.Update(movieById);
+            //await _movieContext.SaveChangesAsync();
+        }
+
+        //delete
+        public async Task DeleteMovieAsync(int id)
+        {
+            var movieById = await GetMovieById(id);
+            if (movieById == null)
+                throw new ArgumentException("There is no movie with this id");
+
+            _movieContext.Movies.Remove(movieById);
+            //await _movieContext.SaveChangesAsync();
         }
     }
 }

@@ -13,9 +13,11 @@ namespace Movie.Service.Implentations
     public class MovieService : IMovieService
     {
         private readonly IMovieRepository _movieRepository;
-        public MovieService(IMovieRepository movieRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public MovieService(IMovieRepository movieRepository, IUnitOfWork unitOfWork)
         {
             _movieRepository = movieRepository;
+            _unitOfWork = unitOfWork;
         }
 
 
@@ -60,6 +62,7 @@ namespace Movie.Service.Implentations
             };
 
             await _movieRepository.AddMovieAsync(movie);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<MovieDTO?> GetMovieById(int id)
@@ -80,6 +83,36 @@ namespace Movie.Service.Implentations
             };
 
             return movieDTO;
+        }
+
+        public async Task UpdateMovieAsync(int id, UpdateMovieDTO updateMovieDTO)
+        {
+            if (id <= 0)
+                throw new ArgumentException("Id cannot be negative or 0");
+            if(updateMovieDTO == null)
+                throw new ArgumentNullException(nameof(updateMovieDTO));
+
+
+            //გადაქასთვა movie entity-ში
+            MovieEntity movie = new MovieEntity
+            {
+                Id = id,
+                Title = updateMovieDTO.Title,
+                ReleaseYear = updateMovieDTO.ReleaseYear,
+                StudioId = updateMovieDTO.StudioId,
+            };
+
+            await _movieRepository.UpdateMovieAsync(id, movie);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+
+        public async Task DeleteMovieAsync(int id)
+        {
+            if (id <= 0)
+                throw new ArgumentException("Id cannot be negative or 0");
+            await _movieRepository.DeleteMovieAsync(id);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

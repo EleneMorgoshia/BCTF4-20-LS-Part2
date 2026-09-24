@@ -14,5 +14,9 @@ namespace Movie.Service.Interfaces
         Task<ICollection<MovieDTO>> GetAllMoviesAsync();
         Task AddMovieAsync(CreateMovieDTO movieDTO);
         Task<MovieDTO?> GetMovieById(int id);
+
+        Task UpdateMovieAsync(int id, UpdateMovieDTO updateMovieDTO);
+        Task DeleteMovieAsync(int id);
+     
     }
 }

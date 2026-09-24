@@ -13,5 +13,7 @@ namespace Movie.Domain.Interfaces
         Task AddMovieAsync(MovieEntity movie);
 
         Task<MovieEntity> GetMovieById(int id);
+        Task UpdateMovieAsync(int id, MovieEntity movie);
+        Task DeleteMovieAsync(int id);
     }
 }
