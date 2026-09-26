@@ -13,10 +13,10 @@ namespace Movie.Infrastructure.Data
     {
         private readonly string _connectionString;
 
-        public MovieDbContext(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
+        //public MovieDbContext(string connectionString)
+        //{
+        //    _connectionString = connectionString;
+        //}
 
         //როცა გავუშვებ ასეთი ცხრილები შემქმნება
         //dbset ეუბნება რომ ცხრილი შექმენი
@@ -30,7 +30,7 @@ namespace Movie.Infrastructure.Data
         // Database-თან კავშირის კონფიგურაცია - აქ ვუთითებთ connection String-ს
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_connectionString);//აქ ჩემი ქონექშენ სტრინგი
+            optionsBuilder.UseSqlServer("Data Source=DESKTOP-8UGO4GL\\SQLEXPRESS;Database=MoviesEFCoreDB;Integrated Security=True;TrustServerCertificate=True;");//აქ ჩემი ქონექშენ სტრინგი
         }
 
         //Entities-ის და მათ შორის რელაციებს, ყველაფერს ეს აკეთებს 

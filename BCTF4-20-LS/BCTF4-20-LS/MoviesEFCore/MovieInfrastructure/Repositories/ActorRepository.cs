@@ -57,7 +57,7 @@ namespace Movie.Infrastructure.Repositories
             _movieContext.Actors.Remove(actorById);
         }
 
-        public async Task UpdateActorMovie(int actorId, ICollection<int> movieIds)
+        public async Task UpdateActorMovieAsync(int actorId, ICollection<int> movieIds)
         {
             //დავააბდეითოთ მსახიობის ფილმები
             var actorById = await _movieContext.Actors.FirstOrDefaultAsync(a => a.Id == actorId);

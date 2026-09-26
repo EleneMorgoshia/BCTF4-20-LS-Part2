@@ -14,7 +14,7 @@ namespace Movie.Domain.Interfaces
         Task<Actor?> GetActorById(int id);
         Task UpdateAcotrAsync(int id, Actor actor);
         Task DeleteActorAsync(int id);
-        Task UpdateActorMovie(int actorId, ICollection<int> movieIds);
+        Task UpdateActorMovieAsync(int actorId, ICollection<int> movieIds);
     
     }
 }

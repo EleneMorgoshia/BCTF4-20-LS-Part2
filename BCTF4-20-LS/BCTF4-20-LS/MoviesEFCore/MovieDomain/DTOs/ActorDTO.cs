@@ -12,7 +12,7 @@ namespace Movie.Domain.DTOs
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public ICollection<String> MovieTitles { get; set; } = new List<String>();
+        public ICollection<String> MoviesTitles { get; set; } = new List<String>();
 
     }
 }

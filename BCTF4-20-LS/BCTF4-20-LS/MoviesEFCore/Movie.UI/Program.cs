@@ -21,35 +21,91 @@ namespace Movie.UI
         static async Task Main(string[] args)
         {
 
-            IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
+            //appjson use;
+            //IConfiguration configuration = new ConfigurationBuilder()
+            //    .SetBasePath(AppContext.BaseDirectory)
+            //    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            //    .Build();
 
-            var _connectionString = configuration.GetConnectionString("DefaultConnection");
+            //var _connectionString = configuration.GetConnectionString("DefaultConnection");
             #region without DI container
-            MovieDbContext movieDbContext = new MovieDbContext(_connectionString);
-            IMovieRepository movieRepository = new MovieRepository(movieDbContext);
-            IMovieService movieService = new MovieService(movieRepository);
+            MovieDbContext movieDbContext = new MovieDbContext();
+            //IMovieRepository movieRepository = new MovieRepository(movieDbContext);
+            //IMovieService movieService = new MovieService(movieRepository);
             #endregion
 
 
             ////DI container
-            //var services = new ServiceCollection();
+            var services = new ServiceCollection();
 
-            //services.AddDbContext<MovieDbContext>(options => options.UseSqlServer(_connectionString));
-            //services.AddScoped<IMovieRepository, MovieRepository>();// addScoped ით ვამათბ სერვისებს
-            //services.AddScoped<IMovieService, MovieService>();
-            //var serviceProcider = services.BuildServiceProvider();
+            services.AddDbContext<MovieDbContext>();
+            services.AddScoped<IMovieRepository, MovieRepository>();
+            services.AddScoped<IMovieService, MovieService>();
 
-            //var movieService = serviceProcider.GetRequiredService<IMovieService>();
-                
+            services.AddScoped<IActorRepository, ActorRepository>();
+            services.AddScoped<IActorService, ActorService>();
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var movieService = serviceProvider.GetRequiredService<IMovieService>();
+            var actorService = serviceProvider.GetRequiredService<IActorService>();
+
+            var studio = new Studio { Name = "Pixar Animation Studios", CountryId = 1 };
+            
 
             ////movie by id:
-            var movieById = await movieService.GetMovieById(1);
+            var movieById = await movieService.GetMovieById(2);
             Console.WriteLine(movieById.Title);
+            movieDbContext.Add(studio);
+            await movieDbContext.SaveChangesAsync();
+
+            var st = await movieDbContext.Studios
+                .FirstOrDefaultAsync(s => s.Name == "Pixar Animation Studios");
+            
+            var movieDTO = new CreateMovieDTO { Title = "Home Alone 3", ReleaseYear = 1996, StudioId = st.Id };
+            var movieDto2 = new CreateMovieDTO { Title = "Home Alone 4", ReleaseYear = 2004, StudioId = st.Id};
+
+            
+            await movieService.AddMovieAsync(movieDTO);
+            await movieService.AddMovieAsync(movieDto2);
+
+            var actorDTO = new CreateActorDTO{FirstName = "Macaulay", LastName = "Culkin"};
 
 
+            await actorService.AddActorAsync(actorDTO);
+            Console.WriteLine("AddActorAsync completed");
+            await actorService.AddActorAsync(actorDTO);
+
+            var film1 = await movieDbContext.Movies
+                .FirstAsync(m => m.Title == "Home Alone 3");
+
+            var film2 = await movieDbContext.Movies
+                .FirstAsync(m => m.Title == "Home Alone 4");
+
+            var updateActorMovieDTO = new UpdateActorMovieDTO
+            {
+                MovieIds = new List<int> { film1.Id, film2.Id }
+
+            };
+
+            await actorService.UpdateActorMovie(1, updateActorMovieDTO);
+
+            var actorsWithMovies = await movieDbContext.Actors
+                .Include(a => a.Movies)
+                .ToListAsync();
+
+            foreach(var item in actorsWithMovies)
+            {
+                Console.Write($"{item.FirstName} {item.LastName}");
+                foreach (var movie in item.Movies)
+                {
+                    Console.Write($" - {movie.Title}");
+                }
+                Console.WriteLine();
+            }
+            #region old Code
             //creating studio in a bad way:D
             //Studio newStudio = new Studio{Name = "Warner Bros", CountryId = 1 };
             //movieDbContext.Studios.Add(newStudio);
@@ -66,6 +122,7 @@ namespace Movie.UI
             //{
             //    Console.WriteLine(movie.ToString());
             //}
+            #endregion
         }
     }
 }
