@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Movie.Domain.DTOs;
 using Movie.Domain.Entities;
 using Movie.Domain.Interfaces;
@@ -11,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace Movie.UI
 {
@@ -20,21 +21,21 @@ namespace Movie.UI
         static async Task Main(string[] args)
         {
 
-            IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
+            //IConfiguration configuration = new ConfigurationBuilder()
+            //    .SetBasePath(AppContext.BaseDirectory)
+            //    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            //    .Build();
 
-            var _connectionString = configuration.GetConnectionString("DefaultConnection");
-            var context = new MovieDbContext(_connectionString);
-            
+            //var _connectionString = configuration.GetConnectionString("DefaultConnection");
+            //var context = new MovieDbContext();
+
             #region without DI container
-            MovieDbContext movieDbContext = new MovieDbContext(_connectionString);
-            IMovieRepository movieRepository = new MovieRepository(movieDbContext);
-            IMovieService movieService = new MovieService(movieRepository);
+            //MovieDbContext movieDbContext = new MovieDbContext();
+            //IMovieRepository movieRepository = new MovieRepository(movieDbContext);
+            //IMovieService movieService = new MovieService(movieRepository);
             #endregion
 
-
+            #region old code
             ////DI container
             //var services = new ServiceCollection();
 
@@ -45,25 +46,46 @@ namespace Movie.UI
 
             //var movieService = serviceProcider.GetRequiredService<IMovieService>();
 
-            var movieById = await movieService.GetMovieById(1);
-            if (movieById != null) 
-            {
-                Console.WriteLine(movieById.Title);
+            //var movieById = await movieService.GetMovieById(1);
+            //if (movieById != null) 
+            //{
+            //    Console.WriteLine(movieById.Title);
 
-                //udpate movie
-                //var updatedMovie = new UpdateMovieDTO
-                //{
-                //    Title = "The matrix Updated",
-                //    ReleaseYear = 1999,
-                //    StudioId = 1
-                //};
-                //await movieService.UpdateMovieAsync(movieById.Id, updatedMovie);
+            //    //udpate movie
+            //    //var updatedMovie = new UpdateMovieDTO
+            //    //{
+            //    //    Title = "The matrix Updated",
+            //    //    ReleaseYear = 1999,
+            //    //    StudioId = 1
+            //    //};
+            //    //await movieService.UpdateMovieAsync(movieById.Id, updatedMovie);
 
-                //delete movie
-                await movieService.DeleteMovieAsync(movieById.Id);
+            //    //delete movie
+            //    await movieService.DeleteMovieAsync(movieById.Id);
 
-            }
+            //}
+
+            #endregion
+
+            //after Lecture#32
+            MovieDbContext movieDbContext = new MovieDbContext();
+            var services = new ServiceCollection();
             
-        }
+            services.AddDbContext<MovieDbContext>();
+            services.AddScoped<IMovieRepository, MovieRepository>();
+            services.AddScoped<IMovieService, MovieService>();
+
+            services.AddScoped<IActorRepository, ActorRepository>();
+            services.AddScoped<IActorService, ActorService>();
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var movieService = serviceProvider.GetRequiredService<IMovieService>();
+            var actorService = serviceProvider.GetRequiredService<IActorService>();
+
+
+        } 
     }
 }
