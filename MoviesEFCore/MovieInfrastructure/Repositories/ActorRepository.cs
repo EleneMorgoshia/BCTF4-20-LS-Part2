@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using MovieEntity = Movie.Domain.Entities.Movie;
 namespace Movie.Infrastructure.Repositories
 {
     public class ActorRepository : IActorRepository
@@ -79,5 +80,7 @@ namespace Movie.Infrastructure.Repositories
             }
             await _unitOfWork.SaveChangesAsync();
         }
+
+        
     }
 }

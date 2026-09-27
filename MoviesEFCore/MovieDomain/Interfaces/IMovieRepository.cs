@@ -15,5 +15,11 @@ namespace Movie.Domain.Interfaces
 
         Task UpdateMovieAsync(MovieEntity movie);
         Task DeleteMovieAsync(int id);
+
+        Task<ICollection<MovieEntity>> SearchMoviesByStudioAsync(int year, string studioName, int minimumActorCount);
+        Task<ICollection<MovieEntity>> SearchMoviesByCountryAsync(string countryName, int minimumYear, int maximumActorCount);
+        Task<ICollection<MovieEntity>> SearchMoviesAdvancedAsync(int fromYear, int toYear, string countryName, string titleText, int minimumActorCount);
+
+
     }
 }
