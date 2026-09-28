@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Movie.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,17 @@ namespace Movie.Infrastructure.Data
     public class MovieDbContext : DbContext
     {
         private readonly string _connectionString;
+
+        public MovieDbContext()
+        {
+
+        }
+
+        public MovieDbContext(DbContextOptions<MovieDbContext> options) : base(options)
+        {
+
+        }
+
 
         //public MovieDbContext(string connectionString)
         //{
@@ -30,8 +42,19 @@ namespace Movie.Infrastructure.Data
         // Database-თან კავშირის კონფიგურაცია - აქ ვუთითებთ connection String-ს
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=DESKTOP-8UGO4GL\\SQLEXPRESS;Database=MoviesEFCoreDB;Integrated Security=True;TrustServerCertificate=True;");//აქ ჩემი ქონექშენ სტრინგი
+            if (!optionsBuilder.IsConfigured) //თუ ბაზა არ არის დაკონფიგურებული
+            {
+                //ჩვენს ბაზაში მოხდეს ყველა ოპერაცია ანუ appsettings.jsonში რა მისამართიც მაქვს იმაზე
+                var configuration = new ConfigurationBuilder()
+                    .SetBasePath(AppContext.BaseDirectory)
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+                var connectionString = configuration.GetConnectionString("DefaultConnection");
+                optionsBuilder.UseSqlServer(connectionString);
+            }
+            //თუ არადა მოქ-ის მიერ შქმენილ ბაზაზეიმუშაოს
         }
+
 
         //Entities-ის და მათ შორის რელაციებს, ყველაფერს ეს აკეთებს 
         //junction table-საც ეს ქმნის აქ შემიძლია სახელი შევუცვალო დეფოლთად თვითნ არქმევს ცხრილების მიხედვით

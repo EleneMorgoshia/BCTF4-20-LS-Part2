@@ -17,6 +17,16 @@ namespace Movie.Service.Interfaces
 
         Task UpdateMovieAsync(int id, UpdateMovieDTO updateMovieDTO);
         Task DeleteMovieAsync(int id);
-     
+
+        //homework task1
+        Task<ICollection<SearchMovieDTO>> GetMoviesByStudioAsync(int year, string studioName, int minimumActorCount);
+
+
+        //homework task2
+        Task<ICollection<SearchMovieDTO>> GetMoviesByCountryAsync(string countryName, int minimumYear, int maximumActorCount);
+
+        //homework  task3
+        Task<ICollection<SearchMovieDTO>> GetMoviesAdvancedAsync(int fromYear, int toYear, string countryName,
+            string titleText, int minimumActorCount);
     }
 }

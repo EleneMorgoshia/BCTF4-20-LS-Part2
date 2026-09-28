@@ -52,59 +52,59 @@ namespace Movie.UI
             var movieService = serviceProvider.GetRequiredService<IMovieService>();
             var actorService = serviceProvider.GetRequiredService<IActorService>();
 
-            var studio = new Studio { Name = "Pixar Animation Studios", CountryId = 1 };
+            //var studio = new Studio { Name = "Pixar Animation Studios", CountryId = 1 };
             
 
             ////movie by id:
-            var movieById = await movieService.GetMovieById(2);
-            Console.WriteLine(movieById.Title);
-            movieDbContext.Add(studio);
-            await movieDbContext.SaveChangesAsync();
+            //var movieById = await movieService.GetMovieById(2);
+            //Console.WriteLine(movieById.Title);
+            //movieDbContext.Add(studio);
+            //await movieDbContext.SaveChangesAsync();
 
-            var st = await movieDbContext.Studios
-                .FirstOrDefaultAsync(s => s.Name == "Pixar Animation Studios");
+            //var st = await movieDbContext.Studios
+            //    .FirstOrDefaultAsync(s => s.Name == "Pixar Animation Studios");
             
-            var movieDTO = new CreateMovieDTO { Title = "Home Alone 3", ReleaseYear = 1996, StudioId = st.Id };
-            var movieDto2 = new CreateMovieDTO { Title = "Home Alone 4", ReleaseYear = 2004, StudioId = st.Id};
+            //var movieDTO = new CreateMovieDTO { Title = "Home Alone 3", ReleaseYear = 1996, StudioId = st.Id };
+            //var movieDto2 = new CreateMovieDTO { Title = "Home Alone 4", ReleaseYear = 2004, StudioId = st.Id};
 
             
-            await movieService.AddMovieAsync(movieDTO);
-            await movieService.AddMovieAsync(movieDto2);
+            //await movieService.AddMovieAsync(movieDTO);
+            //await movieService.AddMovieAsync(movieDto2);
 
-            var actorDTO = new CreateActorDTO{FirstName = "Macaulay", LastName = "Culkin"};
+            //var actorDTO = new CreateActorDTO{FirstName = "Macaulay", LastName = "Culkin"};
 
 
-            await actorService.AddActorAsync(actorDTO);
-            Console.WriteLine("AddActorAsync completed");
-            await actorService.AddActorAsync(actorDTO);
+            //await actorService.AddActorAsync(actorDTO);
+            //Console.WriteLine("AddActorAsync completed");
+            //await actorService.AddActorAsync(actorDTO);
 
-            var film1 = await movieDbContext.Movies
-                .FirstAsync(m => m.Title == "Home Alone 3");
+            //var film1 = await movieDbContext.Movies
+            //    .FirstAsync(m => m.Title == "Home Alone 3");
 
-            var film2 = await movieDbContext.Movies
-                .FirstAsync(m => m.Title == "Home Alone 4");
+            //var film2 = await movieDbContext.Movies
+            //    .FirstAsync(m => m.Title == "Home Alone 4");
 
-            var updateActorMovieDTO = new UpdateActorMovieDTO
-            {
-                MovieIds = new List<int> { film1.Id, film2.Id }
+            //var updateActorMovieDTO = new UpdateActorMovieDTO
+            //{
+            //    MovieIds = new List<int> { film1.Id, film2.Id }
 
-            };
+            //};
 
-            await actorService.UpdateActorMovie(1, updateActorMovieDTO);
+            //await actorService.UpdateActorMovie(1, updateActorMovieDTO);
 
-            var actorsWithMovies = await movieDbContext.Actors
-                .Include(a => a.Movies)
-                .ToListAsync();
+            //var actorsWithMovies = await movieDbContext.Actors
+            //    .Include(a => a.Movies)
+            //    .ToListAsync();
 
-            foreach(var item in actorsWithMovies)
-            {
-                Console.Write($"{item.FirstName} {item.LastName}");
-                foreach (var movie in item.Movies)
-                {
-                    Console.Write($" - {movie.Title}");
-                }
-                Console.WriteLine();
-            }
+            //foreach(var item in actorsWithMovies)
+            //{
+            //    Console.Write($"{item.FirstName} {item.LastName}");
+            //    foreach (var movie in item.Movies)
+            //    {
+            //        Console.Write($" - {movie.Title}");
+            //    }
+            //    Console.WriteLine();
+            //}
             #region old Code
             //creating studio in a bad way:D
             //Studio newStudio = new Studio{Name = "Warner Bros", CountryId = 1 };
@@ -123,6 +123,15 @@ namespace Movie.UI
             //    Console.WriteLine(movie.ToString());
             //}
             #endregion
+
+            var serachedMovies = await movieService.GetMoviesByStudioAsync(2005, "Warner Bros", 2);
+            foreach(var movie in serachedMovies)
+            {
+                Console.WriteLine(movie);
+            }
+
+            //countryს და  studioს კავშირი გასასწორებელია.
+        
         }
     }
 }
