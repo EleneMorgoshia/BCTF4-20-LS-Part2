@@ -52,8 +52,9 @@ namespace Movie.UI
             var movieService = serviceProvider.GetRequiredService<IMovieService>();
             var actorService = serviceProvider.GetRequiredService<IActorService>();
 
+            #region test data
             //var studio = new Studio { Name = "Pixar Animation Studios", CountryId = 1 };
-            
+
 
             ////movie by id:
             //var movieById = await movieService.GetMovieById(2);
@@ -63,11 +64,11 @@ namespace Movie.UI
 
             //var st = await movieDbContext.Studios
             //    .FirstOrDefaultAsync(s => s.Name == "Pixar Animation Studios");
-            
+
             //var movieDTO = new CreateMovieDTO { Title = "Home Alone 3", ReleaseYear = 1996, StudioId = st.Id };
             //var movieDto2 = new CreateMovieDTO { Title = "Home Alone 4", ReleaseYear = 2004, StudioId = st.Id};
 
-            
+
             //await movieService.AddMovieAsync(movieDTO);
             //await movieService.AddMovieAsync(movieDto2);
 
@@ -105,6 +106,7 @@ namespace Movie.UI
             //    }
             //    Console.WriteLine();
             //}
+            #endregion
             #region old Code
             //creating studio in a bad way:D
             //Studio newStudio = new Studio{Name = "Warner Bros", CountryId = 1 };
@@ -124,6 +126,7 @@ namespace Movie.UI
             //}
             #endregion
 
+            CancellationTokenSource cts = new CancellationTokenSource(); //ამას მერე გამოვიყენებ ასინქრონული მეთოდების გამოსაძახებლად 
             var serachedMovies = await movieService.GetMoviesByStudioAsync(2005, "Warner Bros", 2);
             foreach(var movie in serachedMovies)
             {

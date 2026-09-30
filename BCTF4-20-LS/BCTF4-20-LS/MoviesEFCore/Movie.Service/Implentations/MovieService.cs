@@ -21,9 +21,9 @@ namespace Movie.Service.Implentations
         }
 
 
-        public async Task<ICollection<MovieDTO>> GetAllMoviesAsync()
+        public async Task<ICollection<MovieDTO>> GetAllMoviesAsync(CancellationToken cto = default)
         {
-            var movies = await _movieRepository.GetAllMoviesAsync();
+            var movies = await _movieRepository.GetAllMoviesAsync(cto);
             var movieDtos = movies.Select(m => new MovieDTO
             {
                 Id = m.Id,
