@@ -1,0 +1,48 @@
+﻿@page
+@model Movie.Web1.Pages.Movies.IndexModel
+
+
+@* <ul>
+    @foreach (var movie in Model.Movies)
+    {
+      <li>@movie.Title</li>
+      <li>@movie.ReleaseYear</li>
+      <li>@movie.StudioName</li>
+    }
+
+</ul> *@
+
+<div class="container mt-4">
+    <h2 class="mb-3">Movies</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Title</th>
+                    <th>Release Year</th>
+                    <th>Studio Name</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var movie in Model.Movies)
+                {
+                    <tr>
+                        <td>@movie.Title</td>
+                        <td>@movie.ReleaseYear</td>
+                        <td>@movie.StudioName</td>
+                        <td>
+                            <a class="nav-link text-dark"
+                               asp-area=""
+                               asp-page="/Movies/Details"
+                               asp-route-id="@movie.Id">
+                                See Details
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
