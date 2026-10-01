@@ -9,7 +9,7 @@ namespace Movie.Web1.Pages.Movies
     {
         private readonly IMovieService _movieSerice;
 
-        //Stores the movies returned by the service for display on the page.
+        
         public ICollection<MovieDTO> Movies { get; set; } = new List<MovieDTO>();
 
         public IndexModel(IMovieService movieSerice)
@@ -18,13 +18,86 @@ namespace Movie.Web1.Pages.Movies
         }
 
 
+        [BindProperty]
+        public int Year { get; set; }
+
+        [BindProperty]
+        public string StudioName { get; set; }
+
+        [BindProperty]
+        public int MinimumActorCount { get; set; }
+
+
         public async Task OnGetAsync()
         {
             Movies = await _movieSerice.GetAllMoviesAsync();
 
         }
 
+        //public async Task OnPostDeleteAsync(int id)
+        //{
+        //    try
+        //    {
+        //        await _movieSerice.DeleteMovieAsync(id);
+        //        TempData["Success"] = "Movie Deleted successfully";
+        //    }
+        //    catch (Exception ex) 
+        //    {
+        //        TempData["Error"] = ex.Message;
+        //    }
 
+        //    //to get new movie collection(without deleted movie)
+        //    await OnGetAsync();
+        //}
+
+        //IActionResult-  returns a response action.
+        public async Task<IActionResult> OnPostDeleteAsync(int id)
+        {
+            try
+            {
+                await _movieSerice.DeleteMovieAsync(id);
+                TempData["Success"] = "Movie Deleted successfully";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+
+            //to get new movie collection(without deleted movie)
+            return RedirectToPage();
+        }
+
+        public async Task OnPostSearchAsync()
+        {
+            try
+            {
+                var searchedResult = await _movieSerice.GetMoviesByStudioAsync(Year, StudioName, MinimumActorCount);
+                Movies = searchedResult.Select(m => new MovieDTO
+                {
+                    Title = m.Title,
+                    StudioName = m.StudioName,
+                    ReleaseYear = m.ReleaseYear
+                }).ToList();
+            }
+            catch (ArgumentException ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+
+        }
+
+        public async Task OnPostResetAsync()
+        {
+            try
+            {
+                await OnGetAsync();
+
+            }
+            catch (ArgumentException ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+        }
 
         //public List<string> Movies = new List<string>();
         //public void OnGet()
@@ -33,5 +106,6 @@ namespace Movie.Web1.Pages.Movies
         //    Movies.Add("The Matrxi Reloaded");
         //    Movies.Add("The Matrix Revolutions");
         //}
+
     }
 }
