@@ -1,0 +1,102 @@
+﻿@page
+@model Movie.Web1.Pages.Movies.CreateModel
+
+
+
+
+<link rel="stylesheet" href="~/css/movie/create.css" asp-append-version="true" />
+
+@if (!Model.ModelState.IsValid)
+{
+    <div class="alert alert-danger" role="alert">
+        @foreach (var error in Model.ModelState.Values.SelectMany(x => x.Errors))
+        {
+            <div>@error.ErrorMessage</div>
+        }
+    </div>
+}
+
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["Success"]
+    </div>
+}
+
+<div class="create-movie-page">
+    <section class="create-movie-panel">
+        <a asp-page="/Movies/Index" class="back-link">
+            &larr; Back to movies
+        </a>
+
+        <header class="form-header">
+            <span class="eyebrow">YOUR MOVIE COLLECTION</span>
+            <h1>Create Movie</h1>
+            <p>Add a new story to your collection.</p>
+        </header>
+
+        @* METHOD IS POST *@
+        <form method="post" class="movie-form">
+            <div asp-validation-summary="ModelOnly"
+                 class="validation-summary"></div>
+
+            <div class="form-field">
+                <label asp-for="Movie.Title">Movie title</label>
+
+                <input asp-for="Movie.Title"
+                       class="movie-input"
+                       placeholder="Enter movie title"
+                       maxlength="150"
+                       required />
+
+                <span asp-validation-for="Movie.Title"
+                      class="field-error"></span>
+            </div>
+
+            <div class="form-row">
+                <div class="form-field">
+                    <label asp-for="Movie.ReleaseYear">Release year</label>
+
+                    <input asp-for="Movie.ReleaseYear"
+                           type="number"
+                           class="movie-input"
+                           required />
+
+                    <span asp-validation-for="Movie.ReleaseYear"
+                          class="field-error"></span>
+                </div>
+
+                <div class="form-field">
+                    <label asp-for="Movie.StudioId">Studio ID</label>
+
+                    <input asp-for="Movie.StudioId"
+                           type="number"
+                           class="movie-input"
+                           min="1"
+                           required />
+
+                    <span asp-validation-for="Movie.StudioId"
+                          class="field-error"></span>
+
+                    <small>Enter an existing studio’s ID.</small>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a asp-page="/Movies/Index" class="cancel-button">
+                    Cancel
+                </a>
+
+                <button type="submit" class="create-button">
+                    Create Movie
+                    <span aria-hidden="true">&rarr;</span>
+                </button>
+            </div>
+        </form>
+    </section>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

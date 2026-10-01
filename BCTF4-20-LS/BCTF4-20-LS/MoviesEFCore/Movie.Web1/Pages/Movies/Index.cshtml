@@ -1,8 +1,101 @@
 ﻿@page
 @model Movie.Web1.Pages.Movies.IndexModel
 
+<link rel="stylesheet" href="~/css/movie/movie.css"  asp-append-version="true" />
+
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["Error"]
+    </div>
+}
+
+
 <div class="movies-page">
     <h1>Movies</h1>
+
+    <a asp-page="/Movies/Create"
+       class="create-movie-link"
+       aria-label="Create movie"
+       title="Create movie">
+        <span aria-hidden="true">+</span>
+    </a>
+
+    <section class="movie-search-panel">
+        <div class="search-heading">
+            <h2>Find your movie</h2>
+            <p>Search by release year, studio and minimum actor count.</p>
+        </div>
+
+        @* Search form *@
+        <form method="post"
+              asp-page-handler="Search"
+              class="movie-search-form">
+
+            <div class="search-field">
+                <label asp-for="Year">Release year</label>
+
+                <input asp-for="Year"
+                       type="number"
+                       class="search-input"
+                       required />
+
+                <span asp-validation-for="Year"
+                      class="search-error"></span>
+            </div>
+
+            <div class="search-field">
+                <label asp-for="StudioName">Studio name</label>
+
+                <input asp-for="StudioName"
+                       class="search-input"
+                       placeholder="Enter studio name"
+                       required />
+
+                <span asp-validation-for="StudioName"
+                      class="search-error"></span>
+            </div>
+
+            <div class="search-field">
+                <label asp-for="MinimumActorCount">Minimum actors</label>
+
+                <input asp-for="MinimumActorCount"
+                       type="number"
+                       min="0"
+                       class="search-input"
+                       required />
+
+                <span asp-validation-for="MinimumActorCount"
+                      class="search-error"></span>
+            </div>
+
+            <div class="search-actions">
+                <button type="submit" class="search-button">
+                    Search
+                </button>
+
+                <button type="submit"
+                        form="movie-reset-form"
+                        class="search-reset">
+                    Reset
+                </button>
+            </div>
+        </form>
+
+        @* Separate Reset form — calls OnPostResetAsync *@
+        <form id="movie-reset-form"
+              method="post"
+              asp-page-handler="Reset">
+        </form>
+    </section>
 
     <div class="movies-grid">
         @foreach (var movie in Model.Movies)
@@ -22,13 +115,41 @@
 
                     <p class="movie-year">@movie.ReleaseYear</p>
 
-                    <a class="btn movie-details-button"
-                       asp-page="/Movies/Details"
-                       asp-route-id="@movie.Id">
-                        View Details
-                    </a>
+                    <div class="movie-actions">
+                        <a class="btn movie-details-button"
+                           asp-page="/Movies/Details"
+                           asp-route-id="@movie.Id">
+                            View Details
+                        </a>
+
+                        @* Delete form *@
+                        <form method="post"
+                              asp-page-handler="Delete"
+                              asp-route-id="@movie.Id"
+                              class="movie-delete-form">
+
+                            <button type="submit"
+                                    class="movie-delete-button">
+                                Delete
+                            </button>
+                        </form>
+
+                        <a class="btn movie-edit-button"
+                           asp-page="/Movies/Edit"
+                           asp-route-id="@movie.Id">
+                            Edit
+                        </a>
+                    </div>
                 </div>
             </div>
         }
     </div>
+
+    @if (!Model.Movies.Any())
+    {
+        <div class="movies-empty">
+            <h2>No movies found</h2>
+            <p>Try different search values or reset the filters.</p>
+        </div>
+    }
 </div>
