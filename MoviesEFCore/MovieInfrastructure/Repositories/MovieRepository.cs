@@ -70,6 +70,7 @@ namespace Movie.Infrastructure.Repositories
         {
             return await _movieContext.Movies
                 .Include(m => m.Studio)
+                    .ThenInclude(s => s.Country)
                 .Include(m => m.Actors)
                 .Where(m => m.ReleaseYear >= year && m.Studio.Name == studioName && m.Actors.Count >= minimumActorCount)
                 .OrderByDescending(m => m.ReleaseYear)

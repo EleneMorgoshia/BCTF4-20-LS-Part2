@@ -1,0 +1,32 @@
+﻿@page
+@model Movie.Web1.Pages.Movies.DetailsModel
+
+<div class="movie-details-page">
+    <a class="btn details-back-button" asp-page="/Movies/Index">
+        &larr; Back to Movies
+    </a>
+
+    <div class="card details-card">
+        <div class="details-image">
+            <span>Movie Image</span>
+        </div>
+
+        <div class="card-body details-content">
+            <p class="details-label">MOVIE DETAILS</p>
+
+            <h1 class="details-title">@Model.Movie.Title</h1>
+
+            <div class="details-information">
+                <div class="details-information-item">
+                    <p class="details-field">Release Year</p>
+                    <p class="details-value">@Model.Movie.ReleaseYear</p>
+                </div>
+
+                <div class="details-information-item">
+                    <p class="details-field">Studio</p>
+                    <p class="details-value">@Model.Movie.StudioName</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

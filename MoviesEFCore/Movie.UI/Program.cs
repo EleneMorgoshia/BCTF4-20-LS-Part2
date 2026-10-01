@@ -86,6 +86,13 @@ namespace Movie.UI
             var actorService = serviceProvider.GetRequiredService<IActorService>();
 
 
+
+            CancellationTokenSource cts = new CancellationTokenSource(); //ამას მერე გამოვიყენებ ასინქრონული მეთოდების გამოსაძახებლად 
+            var serachedMovies = await movieService.GetMoviesByStudioAsync(2005, "Warner Bros", 2);
+            foreach (var movie in serachedMovies)
+            {
+                Console.WriteLine(movie);
+            }
         } 
     }
 }

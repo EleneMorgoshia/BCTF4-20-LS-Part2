@@ -1,0 +1,36 @@
+﻿@page
+@model Movie.Web1.Pages.Movies.IndexModel
+
+
+
+<div class="movies-page">
+    <h1>Movies</h1>
+
+    <div class="movies-grid">
+        @foreach (var movie in Model.Movies)
+        {
+            <div class="card movie-card">
+                <div class="movie-image">
+                    <span>Movie Image</span>
+                </div>
+
+                <div class="card-body movie-card-body">
+                    <h2 class="movie-title">
+                        <a asp-page="/Movies/Details"
+                           asp-route-id="@movie.Id">
+                            @movie.Title
+                        </a>
+                    </h2>
+
+                    <p class="movie-year">@movie.ReleaseYear</p>
+
+                    <a class="btn movie-details-button"
+                       asp-page="/Movies/Details"
+                       asp-route-id="@movie.Id">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

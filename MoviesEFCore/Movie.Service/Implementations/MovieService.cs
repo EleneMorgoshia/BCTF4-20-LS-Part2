@@ -14,9 +14,11 @@ namespace Movie.Service.Implementations
     public class MovieService :IMovieService
     {
         private readonly IMovieRepository _movieRepository;
-        public MovieService(IMovieRepository movieRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public MovieService(IMovieRepository movieRepository, IUnitOfWork unitOfWork)
         {
             _movieRepository = movieRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<ICollection<MovieDTO>> GetAllMoviesAsync()
