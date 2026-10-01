@@ -1,48 +1,34 @@
 ﻿@page
 @model Movie.Web1.Pages.Movies.IndexModel
 
+<div class="movies-page">
+    <h1>Movies</h1>
 
-@* <ul>
-    @foreach (var movie in Model.Movies)
-    {
-      <li>@movie.Title</li>
-      <li>@movie.ReleaseYear</li>
-      <li>@movie.StudioName</li>
-    }
+    <div class="movies-grid">
+        @foreach (var movie in Model.Movies)
+        {
+            <div class="card movie-card">
+                <div class="movie-image">
+                    <span>Movie Image</span>
+                </div>
 
-</ul> *@
+                <div class="card-body movie-card-body">
+                    <h2 class="movie-title">
+                        <a asp-page="/Movies/Details"
+                           asp-route-id="@movie.Id">
+                            @movie.Title
+                        </a>
+                    </h2>
 
-<div class="container mt-4">
-    <h2 class="mb-3">Movies</h2>
+                    <p class="movie-year">@movie.ReleaseYear</p>
 
-    <div class="table-responsive">
-        <table class="table table-striped table-hover table-bordered align-middle">
-            <thead class="table-dark">
-                <tr>
-                    <th>Title</th>
-                    <th>Release Year</th>
-                    <th>Studio Name</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @foreach (var movie in Model.Movies)
-                {
-                    <tr>
-                        <td>@movie.Title</td>
-                        <td>@movie.ReleaseYear</td>
-                        <td>@movie.StudioName</td>
-                        <td>
-                            <a class="nav-link text-dark"
-                               asp-area=""
-                               asp-page="/Movies/Details"
-                               asp-route-id="@movie.Id">
-                                See Details
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                    <a class="btn movie-details-button"
+                       asp-page="/Movies/Details"
+                       asp-route-id="@movie.Id">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        }
     </div>
 </div>
