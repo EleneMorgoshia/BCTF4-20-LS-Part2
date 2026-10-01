@@ -1,27 +1,43 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Movie.Domain.DTOs;
 using Movie.Service.Interfaces;
 
 namespace Movie.Web1.Pages.Movies
 {
-    public class AddModel : PageModel
+    public class EditModel : PageModel
     {
         private readonly IMovieService _movieService;
-
-        public AddModel(IMovieService movieService)
+        public EditModel(IMovieService movieService)
         {
             _movieService = movieService;
         }
 
+        [BindProperty]
+        public UpdateMovieDTO Movie { get; set; }
 
         [BindProperty]
-        public string Title { get; set; }
-        [BindProperty]
-        public int ReleaseYear { get; set; }
-        [BindProperty]
-        public int StudioId { get; set; }
-        public void OnGet()
+        public int Id { get; set; }
+        public void OnGet(int id)
         {
+            Id = id;
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            try
+            {
+                await _movieService.UpdateMovieAsync(Id, Movie);
+                TempData["Success"] = "Movie updated successfully";
+
+                //will be sent to movie page
+                return RedirectToPage("/Movies/Index");
+            }
+            catch (ArgumentException ex) 
+            {
+                TempData["Error"] = ex.Message;
+                return Page();
+            }
         }
     }
 }
