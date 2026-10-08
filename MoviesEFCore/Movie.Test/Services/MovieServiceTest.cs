@@ -33,7 +33,6 @@ namespace Movie.Test.Services
                 Title = "Test Movie",
                 ReleaseYear = 2000,
                 StudioId = 1
-
             };
 
             //ACT
