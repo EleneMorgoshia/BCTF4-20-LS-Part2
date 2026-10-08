@@ -1,4 +1,95 @@
 ﻿@page
-@model Movie.Web1.Pages.Movies.AddModel
+@model Movie.Web1.Pages.Movies.EditModel
 @{
+}
+
+<link rel="stylesheet" href="/css/movie/edit.css" asp-append-version="true"></link>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["Error"]
+    </div>
+}
+
+
+<div class="edit-container">
+    <div class="edit-card">
+        <div class="edit-header">
+            <span class="edit-label">MOVIE COLLECTION</span>
+            <h1>Edit Movie</h1>
+            <p>Update your movie information below.</p>
+        </div>
+
+        <form method="post"
+              asp-route-id="@RouteData.Values["id"]"
+              class="edit-form">
+
+            <input type="hidden" asp-for="Id" />
+            <div asp-validation-summary="ModelOnly"
+                 class="validation-summary"></div>
+
+            <div class="form-group">
+                <label asp-for="Movie.Title">Movie title</label>
+
+                <input asp-for="Movie.Title"
+                       class="form-input"
+                       placeholder="Enter movie title"
+                       maxlength="150"
+                       required />
+
+                <span asp-validation-for="Movie.Title"
+                      class="field-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Movie.ReleaseYear">Release year</label>
+
+                <input asp-for="Movie.ReleaseYear"
+                       type="number"
+                       class="form-input"
+                       placeholder="Enter release year"
+                       min="1"
+                       required />
+
+                <span asp-validation-for="Movie.ReleaseYear"
+                      class="field-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Movie.StudioId">Studio ID</label>
+
+                <input asp-for="Movie.StudioId"
+                       type="number"
+                       class="form-input"
+                       placeholder="Enter studio ID"
+                       min="1"
+                       required />
+
+                <span asp-validation-for="Movie.StudioId"
+                      class="field-error"></span>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="save-button">
+                    Save Changes
+                </button>
+
+                <a asp-page="/Movies/Index" class="cancel-button">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
