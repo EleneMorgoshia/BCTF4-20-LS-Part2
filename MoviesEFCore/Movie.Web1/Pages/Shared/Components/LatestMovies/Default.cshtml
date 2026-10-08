@@ -1,0 +1,21 @@
+﻿@model ICollection<Movie.Domain.DTOs.MovieDTO>
+
+
+
+<div class="latest-movies">
+    <h1>Latest Movies</h1>
+    <div class="container">
+
+
+        @foreach (var movie in Model)
+        {
+            <div class="latest-movies__movie">
+                <h2>@movie.Title</h2>
+                <h2>@movie.Id</h2>
+                <p>@movie.ReleaseYear</p>
+            </div>
+        }
+
+
+    </div>
+</div>
