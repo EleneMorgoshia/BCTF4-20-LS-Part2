@@ -1,4 +1,10 @@
 
+using Microsoft.EntityFrameworkCore;
+using SchoolDomain.Interfaces;
+using SchoolInfrustructure;
+using SchoolInfrustructure.Data;
+using SchoolInfrustructure.Repositories;
+
 namespace School.Web
 {
     public class Program
@@ -13,6 +19,20 @@ namespace School.Web
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+
+            /// Add Context +
+            /// ?? ????? ????????
+            /// ?????? ????? appsetting-???? connection string-?
+            /// ?????? ??????? ???? ??????????????? ???????????
+            builder.Services.AddDbContext<SchoolDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration
+                    .GetConnectionString("DefaultConnection"));
+            });
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 
             var app = builder.Build();
 
