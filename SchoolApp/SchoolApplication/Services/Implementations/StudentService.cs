@@ -90,13 +90,15 @@ namespace SchoolApplication.Services.Implementations
     
         }
 
-        public async Task DeleteStudentAsnc(Student student, CancellationToken cancelationToken)
+        public async Task DeleteStudentAsnc(int id, CancellationToken cancelationToken)
         {
+            var student = await _studentRepository.GetByIdAsync(id, cancelationToken);
+
             if (student == null)
-                throw new ArgumentNullException(nameof(student));
-            if (await _studentRepository.GetByIdAsync(student.Id) == null)
-                throw new ArgumentException($"There is no student with this - {student.Id} id");
-            
+            {
+                throw new KeyNotFoundException("Student not found");
+            }
+
             _studentRepository.Delete(student);
             await _unitOfWork.SaveChangesAsync(cancelationToken);
         }

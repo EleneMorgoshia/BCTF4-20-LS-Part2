@@ -14,6 +14,5 @@ namespace SchoolDomain.Interfaces
         Task AddStudentAsync(Student student, CancellationToken cancellationToken = default);
         public void Update(Student student);
         void Delete(Student student);
-    
     }
 }

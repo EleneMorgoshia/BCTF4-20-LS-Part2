@@ -1,5 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
+using SchoolApplication.Services.Implementations;
+using SchoolApplication.Services.Interfaces;
 using SchoolDomain.Interfaces;
 using SchoolInfrustructure;
 using SchoolInfrustructure.Data;
@@ -22,9 +24,7 @@ namespace School.Web
 
 
             /// Add Context +
-            /// ?? ????? ????????
-            /// ?????? ????? appsetting-???? connection string-?
-            /// ?????? ??????? ???? ??????????????? ???????????
+            /// db context, repositories and services + unit of work
             builder.Services.AddDbContext<SchoolDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration
@@ -33,6 +33,8 @@ namespace School.Web
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+            builder.Services.AddScoped<IStudentService, StudentService>();
+                
 
             var app = builder.Build();
 
